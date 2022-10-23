@@ -68,10 +68,4 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     })
     loadPage()
-})
-
-loadPage()
-
-document.addEventListener('addtocart', () => {
-    console.log('adding');
-})
+});
