@@ -1,68 +1,77 @@
 import CartItem from "./CartItem.js";
 import CartHelper from "./helper/CartHelper.js";
 
-let container = '';
 let count = 0;
-let cart = CartHelper.getCart;
+export default class Cart {
+    constructor(selector) {
+        this.container = document.getElementById(selector);
+        this.cart = CartHelper.getCart;
+        this.cartHTML = '';
+        this.loadCart();
+    }
 
-
-export default function Cart (selector) {
-    container = document.getElementById(selector);
-    cart = CartHelper.getCart;
-    loadCart();
-}
-
-function loadCart() {
-    let cartHtml = `
-        <div class="shopping-cart container">
-            <!-- Title -->
-            <div class="title mt-5 mb-5">
-                <h1>Total Price : <span id="cart-total-price">$${CartHelper.calcTotalPrice()}<span></h1>
-            </div>
-            <div class="cart-wrapper shadow-sm">
-    `;
-    
-    if (cart.length <= 0) {
-        container.innerHTML += `<h2 class="text-center mt-5">You don't have any item in the cart :(</h2>
-            <div class="d-flex justify-content-center">
-                <a href="/" data-link class="btn btn-primary">BACK TO HOME</a>
-            </div>
-        </div></div>`
-    } else {
-        cart.forEach(item => {
-            cartHtml += new CartItem(item).createHTML();
-        })
-        cartHtml += '</div></div>'
-        container.innerHTML += cartHtml;
+    loadCart() {
+        this.cartHTML = `
+            <div id="sp-cart" class="shopping-cart container">
+                <!-- Title -->
+                <div class="title mt-5">
+                    <h1>Total Price : <span id="cart-total-price">$${CartHelper.calcTotalPrice()}<span></h1>
+                </div>
+                <div class="mb-5">
+                    <button class="btn btn-primary" id="clear-all">CLEAR ALL <i class="fa-sharp fa-solid fa-trash"></i></button>
+                </div>
+                <div class="cart-wrapper shadow-sm">
+        `;
+        
+        if (this.cart.length <= 0) {
+            this.cartHTML = `<h2 class="text-center mt-5">You don't have any item in the cart :(</h2>
+                <div class="d-flex justify-content-center">
+                    <a href="/" data-link class="btn btn-primary">BACK TO HOME</a>
+                </div>
+            </div></div>`;
+        } else {
+            this.cart.forEach(item => {
+                this.cartHTML += new CartItem(item).createHTML();
+            })
+        }
+        this.cartHTML += '</div></div>';
+        this.container.innerHTML += this.cartHTML;
 
         if (count === 0) {
-            applyListeners();
+            this.applyListeners();
             count = 1;
         }
     }
-}
 
-function applyListeners() {
-    document.addEventListener('click', (e) => {
-        const { target } = e;
-        const productAttr = target.attributes['data-product-id'] || target.parentNode.attributes['data-product-id'] || undefined;
-        if (productAttr && productAttr.value !== undefined) {
-            let id = Number(productAttr.value);
-            if(target.matches('.plus-btn') || target.parentNode.matches('.plus-btn')) {
-                const clickedProduct = cart.find(item => item.id === id);
-                CartHelper.addToCart(clickedProduct);
+    applyListeners() {
+        document.addEventListener('click', (e) => {
+            const { target } = e;
+            let parent = target.parentNode.nodeName !== '#document' && target.parentNode.attributes['data-product-id'];
+            const productAttr = target.attributes['data-product-id'] || parent;
+
+            if (productAttr && typeof productAttr.value !== 'undefined') {
+                let id = Number(productAttr.value);
+                if(target.matches('.plus-btn') || target.parentNode.matches('.plus-btn')) {
+                    const clickedProduct = this.cart.find(item => item.id === id);
+                    CartHelper.addToCart(clickedProduct);
+                }
+                if (target.matches('.minus-btn') || target.parentNode.matches('.minus-btn')) {
+                    CartHelper.removeItemFromCart(id);
+                }
+                if (target.matches('.delete-btn') || target.parentNode.matches('.delete-btn')) {
+                    CartHelper.remove(id);
+                }
+                if (CartHelper.getCart.length <= 0 && location.pathname === '/cart') {
+                    this.cart = CartHelper.getCart;
+                    document.querySelector('.shopping-cart').remove();
+                    this.loadCart();
+                }
             }
-            if (target.matches('.minus-btn') || target.parentNode.matches('.minus-btn') && productAttr !== undefined) {
-                CartHelper.removeItemFromCart(id);
+
+            if (target.matches('#clear-all')) {
+                CartHelper.clearAll();
+                this.loadCart();
             }
-            if (target.matches('.delete-btn') || target.parentNode.matches('.delete-btn') && productAttr !== undefined) {
-                CartHelper.remove(id);
-            }
-            if (CartHelper.getCart.length <= 0) {
-                cart = CartHelper.getCart;
-                document.querySelector('.shopping-cart').remove();
-                loadCart();
-            }
-        }
-    });
+        });
+    }
 }

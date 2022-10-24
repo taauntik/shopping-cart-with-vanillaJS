@@ -74,16 +74,14 @@ export default class CartHelper {
                 document.getElementById(id).value = updatedItem.amount;
                 const totalPrice = this.getCartItemPrice(updatedItem.price, updatedItem.amount);
                 this.updateCartItemPrice(totalPrice, id);
-            } else {
-                // document.getElementById(`item-${id}`).remove();
-                alert('Can not go less than this');
             }
+            return;
         }
     }
 
     static remove(id) {
-        this.setCart = this.getCart.filter(item => item.id !== id);
         document.getElementById(`item-${id}`).remove();
+        this.setCart = this.getCart.filter(item => item.id !== id);
 
         // update navbar cart count
         this.updateNavCartValue = this.getCartItemCount;
@@ -105,5 +103,11 @@ export default class CartHelper {
 
     static updateCartTotalPrice (totalPrice) {
         document.getElementById('cart-total-price').innerText = `$${totalPrice}`;
+    }
+
+    static clearAll() {
+        this.setCart = [];
+        this.updateNavCartValue = this.getCartItemCount;
+        document.getElementById('sp-cart').remove();
     }
 }

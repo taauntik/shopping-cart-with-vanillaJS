@@ -49,9 +49,9 @@ function loadPage() {
         localStorage.setItem('cart', JSON.stringify([]));
     }
     if (location.pathname === '/') {
-        Home('container');
+        new Home('container');
     } else if (location.pathname === '/cart') {
-        Cart('container');
+        new Cart('container');
     }
 }
 
