@@ -52,14 +52,23 @@ export default class CartHelper {
 
     static removeItemFromCart(id) {
         let cart = this.getCart;
+        let stop = false;
         cart = cart.reduce((ack, item) => {
             if (item.id === id) {
-                if (item.amount === 1) return ack;
+                if (item.amount === 1) {
+                    // when product has amount of 1 break this fn
+                    stop = true;
+                    return ack;
+                }
                 return [...ack, { ... item, amount : item.amount - 1 }];
             } else {
                 return [...ack, item];
             }
         }, []);
+
+        if (stop === true) {
+            return;
+        }
 
         // set updated cart to localStorage
         this.setCart = cart;
@@ -106,8 +115,8 @@ export default class CartHelper {
     }
 
     static clearAll() {
+        document.querySelector('.shopping-cart').remove();
         this.setCart = [];
         this.updateNavCartValue = this.getCartItemCount;
-        document.getElementById('sp-cart').remove();
     }
 }

@@ -5,14 +5,14 @@ import Home from "./Home.js";
 const container = document.getElementById('container');
 
 export const navigateTo = (url) => {
-    history.pushState(null, null, url);
+    history.pushState({}, "", url);
     loadPage();
 }
 
 const route = (event) => {
     event = event || window.event;
     event.preventDefault();
-    window.history.pushState({}, "", event.target.href);
+    navigateTo(event.target.href);
     if (event.target.parentNode.id === 'cart') {
         navigateTo(event.target.parentNode.parentNode.href);
     } else if (event.target.parentNode.id === 'cart-route') {
@@ -20,7 +20,6 @@ const route = (event) => {
     } else {
         navigateTo(event.target.href);
     }
-    loadPage();
 }
 
 function generateNavbarHtml(cartItemCount) {
@@ -61,11 +60,13 @@ window.onpopstate = loadPage;
 
 
 document.addEventListener('DOMContentLoaded', () => {
-    document.body.addEventListener('click', (e) => {
-        if (e.target.matches("[data-link]")) {
-            e.preventDefault();
-            navigateTo(e.target.href);
-        }
-    })
+    if (location.pathname === '/') {
+        document.body.addEventListener('click', (e) => {
+            if (e.target.matches("[data-link]")) {
+                e.preventDefault();
+                navigateTo(e.target.href);
+            }
+        })
+    }
     loadPage()
 });

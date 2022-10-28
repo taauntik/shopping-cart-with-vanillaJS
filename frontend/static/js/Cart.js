@@ -45,32 +45,42 @@ export default class Cart {
 
     applyListeners() {
         document.addEventListener('click', (e) => {
-            const { target } = e;
-            let parent = target.parentNode.nodeName !== '#document' && target.parentNode.attributes['data-product-id'];
-            const productAttr = target.attributes['data-product-id'] || parent;
+                const { target } = e;
+                let parent = target.parentNode.nodeName !== '#document' && target.parentNode.attributes['data-product-id'];
+                const productAttr = target.attributes['data-product-id'] || parent;
 
-            if (productAttr && typeof productAttr.value !== 'undefined') {
-                let id = Number(productAttr.value);
-                if(target.matches('.plus-btn') || target.parentNode.matches('.plus-btn')) {
-                    const clickedProduct = this.cart.find(item => item.id === id);
-                    CartHelper.addToCart(clickedProduct);
+            if (location.pathname === '/cart') {
+                if (productAttr && typeof productAttr.value !== 'undefined') {
+                    let id = Number(productAttr.value);
+
+                    // increase the product amount
+                    if(target.matches('.plus-btn') || target.parentNode.matches('.plus-btn')) {
+                        const clickedProduct = this.cart.find(item => item.id === id);
+                        CartHelper.addToCart(clickedProduct);
+                    }
+
+                    // decrease the product amount
+                    if (target.matches('.minus-btn') || target.parentNode.matches('.minus-btn')) {
+                        CartHelper.removeItemFromCart(id);
+                    }
+
+                    // remove the clicked item
+                    if (target.matches('.delete-btn') || target.parentNode.matches('.delete-btn')) {
+                        CartHelper.remove(id);
+                    }
+
+                    // clear the shopping cart
+                    if (CartHelper.getCart.length <= 0 && location.pathname === '/cart') {
+                        this.cart = CartHelper.getCart;
+                        document.querySelector('.shopping-cart').remove();
+                        this.loadCart();
+                    }
                 }
-                if (target.matches('.minus-btn') || target.parentNode.matches('.minus-btn')) {
-                    CartHelper.removeItemFromCart(id);
-                }
-                if (target.matches('.delete-btn') || target.parentNode.matches('.delete-btn')) {
-                    CartHelper.remove(id);
-                }
-                if (CartHelper.getCart.length <= 0 && location.pathname === '/cart') {
-                    this.cart = CartHelper.getCart;
-                    document.querySelector('.shopping-cart').remove();
+
+                if (target.matches('#clear-all')) {
+                    CartHelper.clearAll();
                     this.loadCart();
                 }
-            }
-
-            if (target.matches('#clear-all')) {
-                CartHelper.clearAll();
-                this.loadCart();
             }
         });
     }
