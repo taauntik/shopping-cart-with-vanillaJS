@@ -113,9 +113,4 @@ export default class CartHelper {
     static updateCartTotalPrice (totalPrice) {
         document.getElementById('cart-total-price').innerText = `$${totalPrice}`;
     }
-
-    static clearAll() {
-        this.setCart = [];
-        this.updateNavCartValue = this.getCartItemCount;
-    }
 }
