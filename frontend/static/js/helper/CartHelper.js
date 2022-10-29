@@ -115,7 +115,6 @@ export default class CartHelper {
     }
 
     static clearAll() {
-        document.querySelector('.shopping-cart').remove();
         this.setCart = [];
         this.updateNavCartValue = this.getCartItemCount;
     }

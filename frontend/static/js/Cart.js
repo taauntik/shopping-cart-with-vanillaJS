@@ -48,8 +48,14 @@ export default class Cart {
                 const { target } = e;
                 let parent = target.parentNode.nodeName !== '#document' && target.parentNode.attributes['data-product-id'];
                 const productAttr = target.attributes['data-product-id'] || parent;
-
             if (location.pathname === '/cart') {
+                // clear the shopping-cart
+                if (target.matches('#clear-all') || target.parentNode.matches('#clear-all')) {
+                    CartHelper.setCart = [];
+                    this.cart = CartHelper.getCart;
+                    CartHelper.updateNavCartValue = CartHelper.getCartItemCount;
+                }
+
                 if (productAttr && typeof productAttr.value !== 'undefined') {
                     let id = Number(productAttr.value);
 
@@ -68,17 +74,12 @@ export default class Cart {
                     if (target.matches('.delete-btn') || target.parentNode.matches('.delete-btn')) {
                         CartHelper.remove(id);
                     }
-
-                    // clear the shopping cart
-                    if (CartHelper.getCart.length <= 0 && location.pathname === '/cart') {
-                        this.cart = CartHelper.getCart;
-                        document.querySelector('.shopping-cart').remove();
-                        this.loadCart();
-                    }
                 }
 
-                if (target.matches('#clear-all')) {
-                    CartHelper.clearAll();
+                // remove shopping-cart from the UI when cart is empty
+                if (CartHelper.getCart.length <= 0) {
+                    this.cart = CartHelper.getCart;
+                    document.querySelector('.shopping-cart').remove();
                     this.loadCart();
                 }
             }
