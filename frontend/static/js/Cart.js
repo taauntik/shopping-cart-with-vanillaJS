@@ -79,8 +79,10 @@ export default class Cart {
                 // remove shopping-cart from the UI when cart is empty
                 if (CartHelper.getCart.length <= 0) {
                     this.cart = CartHelper.getCart;
-                    document.querySelector('.shopping-cart').remove();
-                    this.loadCart();
+                    if(document.querySelector('.shopping-cart') !== null) {
+                        document.querySelector('.shopping-cart').remove();
+                        this.loadCart();
+                    }
                 }
             }
         });

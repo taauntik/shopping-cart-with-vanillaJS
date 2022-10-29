@@ -60,13 +60,11 @@ window.onpopstate = loadPage;
 
 
 document.addEventListener('DOMContentLoaded', () => {
-    if (location.pathname === '/') {
-        document.body.addEventListener('click', (e) => {
-            if (e.target.matches("[data-link]")) {
-                e.preventDefault();
-                navigateTo(e.target.href);
-            }
-        })
-    }
+    document.body.addEventListener('click', (e) => {
+        if (e.target.matches("[data-link]")) {
+            e.preventDefault();
+            navigateTo(e.target.href);
+        }
+    })
     loadPage()
 });

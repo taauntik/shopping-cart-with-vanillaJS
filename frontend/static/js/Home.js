@@ -40,11 +40,13 @@ export default class Home {
 
     applyListeners() {
         document.addEventListener('click', ({ target }) => {
-            let parent = target.parentNode.nodeName !== '#document' && target.parentNode.attributes['data-product-id'];
-            const productAttr = target.attributes['data-product-id'] || parent;
-            if(target.matches('.pd-card-btn') || target.parentNode.matches('.pd-card-btn') && productAttr !== undefined) {
-                const clickedProduct = this.products.find(item => item.id === Number(productAttr.value));
-                CartHelper.addToCart(clickedProduct);
+            if (location.pathname === '/') {
+                let parent = target.parentNode.nodeName !== '#document' && target.parentNode.attributes['data-product-id'];
+                const productAttr = target.attributes['data-product-id'] || parent;
+                if(target.matches('.pd-card-btn') || target.parentNode.matches('.pd-card-btn') && productAttr !== undefined) {
+                    const clickedProduct = this.products.find(item => item.id === Number(productAttr.value));
+                    CartHelper.addToCart(clickedProduct);
+                }
             }
         });
     }
