@@ -61,6 +61,7 @@ export default class Cart {
 
                     // increase the product amount
                     if(target.matches('.plus-btn') || target.parentNode.matches('.plus-btn')) {
+                        this.cart = CartHelper.getCart;
                         const clickedProduct = this.cart.find(item => item.id === id);
                         if (clickedProduct) {
                             CartHelper.addToCart(clickedProduct);
