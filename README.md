@@ -1,2 +1,2 @@
 # shopping-cart-with-vanillaJS
-## [Live site](https://nimble-alfajores-c3fd6d.netlify.app/)
+## [Live site](https://sp-cart-vanilla.netlify.app/)
