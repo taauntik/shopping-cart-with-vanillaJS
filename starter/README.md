@@ -1,4 +1,18 @@
 # HTML code description
+## Navbar html
+```
+<nav class="navbar shadow-sm sticky-top">
+   <div class="container">
+      <a class="navbar-brand font-monospace" data-link href="/">Shopping Cart</a>
+      <a href="/cart" data-link id="cart-route" onclick="route()">
+         <div class="ms-auto" id="cart" style="text-decoration: none; color : black">
+            <i style="font-size: 20px" class="fa-solid fa-cart-shopping"></i>
+            <span class="cartItem"id="nav-cart-item">0</span>
+         </div>
+      </a>
+   </div>
+</nav>
+```
 
 ## Home page
 
