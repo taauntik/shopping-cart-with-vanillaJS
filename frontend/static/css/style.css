@@ -50,6 +50,7 @@
     border-bottom: 1px solid lightblue;
     display: flex;
     justify-content: center;
+    align-items: center;
 }
 
 
