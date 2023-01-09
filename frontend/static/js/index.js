@@ -47,10 +47,20 @@ function loadPage() {
     if (!localStorage.getItem('cart')) {
         localStorage.setItem('cart', JSON.stringify([]));
     }
-    if (location.pathname === '/') {
-        new Home('container');
-    } else if (location.pathname === '/cart') {
-        new Cart('container');
+
+    // control routing
+    const { pathname } = location;
+    switch (pathname) {
+        case '/':
+            new Home('container');
+            break;
+
+        case '/cart':
+            new Cart('container');
+            break;
+
+        default:
+            break;
     }
 }
 
